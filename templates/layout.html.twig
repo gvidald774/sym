@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% block content %}{% endblock %}
+    {% block enlaces %}
+        <a href="{{ path('show_alumnos') }}"></a>
+        <a href="{{ path('show_asignaturas') }}"></a>
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'layout.html.twig' %}
+{% block title %} {{ titulo }} {% endblock %}
+{% block content %}
+    <h1>{{ titulo }}</h1>
+
+    <table>
+    {# Cabecera #}
+        <tr>
+            {% for campo in tabla|keys[1:] %}
+                <th>{{ campo }}</th>
+            {% endfor %}
+        </tr>
+    {# for para las filas #}
+        {% for asunto in tabla %}
+        <tr>
+            {% for campo in tabla|keys[1:] %}
+            <td>{{ campo }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
