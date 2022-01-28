@@ -3,8 +3,12 @@ namespace App\Controller;
 
 use App\Entity\Alumno;
 use App\Entity\Asignatura;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -27,9 +31,16 @@ class AlumnoController extends AbstractController
         }
         else
         {
-            return $this->render('table.html.twig', [
+            $nuevosalumnos = array();
+            foreach($alumnos as $alumno)
+            {
+                $alumnonuevo = $alumno;
+                $alumnonuevo->fechaNacimiento = $alumno->getFechaNacimiento()->format('Y-m-d');
+                $nuevosalumnos[] = $alumnonuevo;
+            }
+            return $this->render('alumnotabla.html.twig', [
                 'titulo' => "Lista de alumnos",
-                'tabla' => $alumnos
+                'tableau' => $nuevosalumnos
             ]);
         }
     }
@@ -71,7 +82,7 @@ class AlumnoController extends AbstractController
     }
 
     /**
-     * @Route("/alumno/{dni}"), name="ficha_alumno")
+     * @Route("/alumno/ficha/{dni}"), name="ficha_alumno")
      */
     public function fichaAlumno(ManagerRegistry $doctrine, string $dni): Response
     {
@@ -148,6 +159,32 @@ class AlumnoController extends AbstractController
         $entityManager->flush();
 
         return new Response("Alumno borrado con éxito? no sé");
+    }
+
+    // Ahora formularios
+
+    /**
+     * @Route ("alumno/crea", name="crea_alumno")
+     */
+    public function creaAlumno(Request $request): Response
+    {
+        $alumno = new Alumno();
+        // blablabla coger el alumno de la base de datos
+
+        $form = $this->createFormBuilder($alumno)
+            ->add('dni', TextType::class) // Hay que validarlo.
+            ->add('nombre', TextType::class)
+            ->add('apellidos', TextType::class)
+            ->add('fecha_nacimiento', DateType::class)
+            ->add('localidad', TextType::class)
+            ->add('guardar', SubmitType::class, ['label' => 'Guardar alumno'])
+            // ->add('asignaturas') // tendría que hacer otro select
+            ->getForm();
+
+            return $this->renderForm('form.html.twig',[
+                'titulo' => "Creación de alumnos",
+                'form' => $form
+        ]);
 
     }
 }

@@ -1,0 +1,27 @@
+{% extends 'table.html.twig' %}
+{% block tabla %}
+<tr>
+    <th>DNI</th>
+    <th>Nombre</th>
+    <th>Apellidos</th>
+    <th>Fecha de nacimiento</th>
+    <th>Localidad</th>
+    <th>Asignaturas</th>
+</tr>
+{% for alumno in tableau %}
+<tr>
+    <td>{{alumno.dni}}</td>
+    <td>{{alumno.nombre}}</td>
+    <td>{{alumno.apellidos}}</td>
+    <td>{{alumno.fechaNacimiento}}</td>
+    <td>{{alumno.localidad}}</td>
+    <td>
+        <ul>
+        {% for asig in alumno.asignaturas %}
+            <li><a href="{{path('muestra_alumnos_asignatura',{nombre: asig.nombre})}}">{{asig.nombre}}</a></li>
+        {% endfor %}
+        </ul>
+    </td>
+</tr>
+{% endfor %}
+{% endblock %}

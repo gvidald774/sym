@@ -95,7 +95,7 @@ class Alumno
         return $this;
     }
 
-    public function getFechaNacimiento(): \DateTime
+    public function getFechaNacimiento(): ?\DateTime
     {
         return $this->fecha_nacimiento;
     }
